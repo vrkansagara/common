@@ -1,0 +1,75 @@
+{
+    "name": "vrkansagara/common",
+    "description": "Common library code for \\VRKANSAGARA\\* namespace. ",
+    "keywords": [
+        "vrkansagara",
+        "library",
+        "helper",
+        "common"
+    ],
+    "homepage": "https://vrkansagara.in",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Vallabh Kansagara",
+            "email": "vrkansagara@gmail.com",
+            "homepage": "https://vrkansagara.in"
+        }
+    ],
+    "require": {
+        "php": ">=7.0|^8.0",
+        "ext-zlib": "*",
+        "ext-pcre": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vrkansagara\\Common\\": "src"
+        },
+        "files": [
+            "src/helper.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vrkansagara\\Common\\": "tests"
+        }
+    },
+    "support": {
+        "email": "vrkansagara@gmail.com",
+        "issues": "https://github.com/vrkansagara/Common/issues",
+        "source": "https://github.com/vrkansagara/Common"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+    },
+    "require-dev": {
+        "laminas/laminas-coding-standard": "^2.3",
+        "phpunit/phpunit": "^9.5"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump"
+        ],
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "./vendor/bin/phpcs -s",
+        "cs-fix": "./vendor/bin/phpcbf --standard=./phpcs.xml",
+        "test": [
+            "./vendor/bin/phpunit --testdox --colors=always",
+            "echo 'Current head at ' && git rev-parse --verify HEAD"
+        ],
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    }
+}
