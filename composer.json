@@ -17,8 +17,13 @@
             "homepage": "https://vrkansagara.in"
         }
     ],
+    "support": {
+        "email": "vrkansagara@gmail.com",
+        "issues": "https://github.com/vrkansagara/Common/issues",
+        "source": "https://github.com/vrkansagara/Common"
+    },
     "require": {
-        "php": ">=7.0|^8.0",
+        "php": "^8.0",
         "ext-zlib": "*",
         "ext-pcre": "*"
     },
@@ -27,7 +32,11 @@
             "Vrkansagara\\Common\\": "src"
         },
         "files": [
-            "src/helper.php"
+            "src/Helpers/helper.php",
+            "src/Helpers/http.php",
+            "src/Helpers/ip.php",
+            "src/Helpers/laravel.php",
+            "src/Helpers/payload.php"
         ]
     },
     "autoload-dev": {
@@ -35,18 +44,9 @@
             "Vrkansagara\\Common\\": "tests"
         }
     },
-    "support": {
-        "email": "vrkansagara@gmail.com",
-        "issues": "https://github.com/vrkansagara/Common/issues",
-        "source": "https://github.com/vrkansagara/Common"
-    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
-    },
-    "require-dev": {
-        "laminas/laminas-coding-standard": "^2.3",
-        "phpunit/phpunit": "^9.5"
     },
     "config": {
         "optimize-autoloader": true,
@@ -71,5 +71,11 @@
             "echo 'Current head at ' && git rev-parse --verify HEAD"
         ],
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    },
+    "require-dev": {
+        "illuminate/collections": "^11.21",
+        "illuminate/http": "^11.21",
+        "laminas/laminas-coding-standard": "^2.5",
+        "phpunit/phpunit": "^9.6"
     }
 }
