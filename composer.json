@@ -24,14 +24,14 @@
     },
     "require": {
         "php": "^8.0",
-        "ext-zlib": "*",
-        "ext-pcre": "*",
         "ext-curl": "*",
         "ext-exif": "*",
         "ext-fileinfo": "*",
         "ext-json": "*",
+        "ext-pcre": "*",
         "ext-soap": "*",
-        "ext-xml": "*"
+        "ext-xml": "*",
+        "ext-zlib": "*"
     },
     "autoload": {
         "psr-4": {
