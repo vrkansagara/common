@@ -42,7 +42,8 @@
             "src/Helpers/http.php",
             "src/Helpers/ip.php",
             "src/Helpers/laravel.php",
-            "src/Helpers/payload.php"
+            "src/Helpers/payload.php",
+            "src/Helpers/time.php"
         ]
     },
     "autoload-dev": {
@@ -66,9 +67,15 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump"
         ],
+        "cler": [
+            "rm .phpcs-cache",
+            "rm .phpunit.result.cache"
+        ],
         "check": [
             "@cs-check",
-            "@test"
+            "@cs-fix",
+            "@test",
+            "@cler"
         ],
         "cs-check": "./vendor/bin/phpcs -s --standard=./phpcs.xml",
         "cs-fix": "./vendor/bin/phpcbf --standard=./phpcs.xml",
