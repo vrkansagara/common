@@ -19,7 +19,7 @@ if (! function_exists('num_cpus')) {
             preg_match_all('/^processor/m', $cpuinfo, $matches);
 
             $numCpus = count($matches[0]);
-        } elseif ('WIN' == strtoupper(substr(PHP_OS, 0, 3))) {
+        } elseif ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
             $process = @popen('wmic cpu get NumberOfCores', 'rb');
 
             if (false !== $process) {
@@ -50,7 +50,8 @@ if (! function_exists('num_cpus')) {
 //Add whatever options here. The CURLOPT_URL is left out intentionally.
 //It will be added in later from the url array.
 //$optionArray = [
-//    CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0', //Pick your user agent.
+//    CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0',
+// Pick your user agent.
 //    CURLOPT_RETURNTRANSFER => true,
 //    CURLOPT_TIMEOUT        => 10,
 //    CURLOPT_ENCODING       => 'UTF-8',
@@ -65,10 +66,14 @@ if (! function_exists('num_cpus')) {
 //$nThreads = num_cpus();
 
 if (! function_exists('multi_thread_curl')) {
-    function multi_thread_curl($urlArray, $nThreads = 1)
+    /**
+     * @param array $urlArray
+     * @return array
+     */
+    function multi_thread_curl(array $urlArray = [], int $nThreads = 1, bool $preserveKeys = true): array
     {
         //Group your urls into groups/threads.
-        $curlArray = array_chunk($urlArray, $nThreads, $preserve_keys = true);
+        $curlArray = array_chunk($urlArray, $nThreads, $preserveKeys);
 
         //Iterate through each batch of urls.
         $ch = 'ch_';
@@ -94,13 +99,13 @@ if (! function_exists('multi_thread_curl')) {
             //execute the handles.
             do {
                 $mrc = curl_multi_exec($mh, $active);
-            } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+            } while ($mrc === CURLM_CALL_MULTI_PERFORM);
 
-            while ($active && $mrc == CURLM_OK) {
-                if (curl_multi_select($mh) != -1) {
+            while ($active && $mrc === CURLM_OK) {
+                if (curl_multi_select($mh) !== -1) {
                     do {
                         $mrc = curl_multi_exec($mh, $active);
-                    } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+                    } while ($mrc === CURLM_CALL_MULTI_PERFORM);
                 }
             }
 

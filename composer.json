@@ -25,7 +25,13 @@
     "require": {
         "php": "^8.0",
         "ext-zlib": "*",
-        "ext-pcre": "*"
+        "ext-pcre": "*",
+        "ext-curl": "*",
+        "ext-exif": "*",
+        "ext-fileinfo": "*",
+        "ext-json": "*",
+        "ext-soap": "*",
+        "ext-xml": "*"
     },
     "autoload": {
         "psr-4": {
@@ -33,7 +39,6 @@
         },
         "files": [
             "src/Helpers/curl.php",
-            "src/Helpers/helper.php",
             "src/Helpers/http.php",
             "src/Helpers/ip.php",
             "src/Helpers/laravel.php",
@@ -65,7 +70,7 @@
             "@cs-check",
             "@test"
         ],
-        "cs-check": "./vendor/bin/phpcs -s",
+        "cs-check": "./vendor/bin/phpcs -s --standard=./phpcs.xml",
         "cs-fix": "./vendor/bin/phpcbf --standard=./phpcs.xml",
         "test": [
             "./vendor/bin/phpunit --testdox --colors=always",

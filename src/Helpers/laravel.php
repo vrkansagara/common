@@ -6,14 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 if (! function_exists('lIsProductionEnvironment')) {
-    function lIsProductionEnvironment()
+    function lIsProductionEnvironment(): bool
     {
         return in_array(app()->environment(), ['prod', 'production']) ? true : false;
     }
 }
 
 if (! function_exists('lD')) {
-    function lD(...$vars)
+    /**
+     * @param array ...$vars
+     */
+    function lD(array ...$vars): void
     {
         $debug = debug_backtrace()[0];
         foreach ($vars as $v) {
@@ -46,9 +49,7 @@ if (! function_exists('lConvertApiDropDown')) {
     /**
      * This function convert to SPI like dropdown
      *
-     * @param $data
-     * @param $keyName
-     * @param $valueName
+     * @param mixed $data
      * @param array $extra
      * @return array
      */
