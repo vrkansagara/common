@@ -1,24 +1,22 @@
 <?php
 
-/**
- * @copyright  Copyright (c) 2015-2022 Vallabh Kansagara <vrkansagara@gmail.com>
- * @license    https://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 if (! function_exists('lIsProductionEnvironment')) {
-    function lIsProductionEnvironment()
+    function lIsProductionEnvironment(): bool
     {
         return in_array(app()->environment(), ['prod', 'production']) ? true : false;
     }
 }
 
 if (! function_exists('lD')) {
-    function lD(...$vars)
+    /**
+     * @param array ...$vars
+     */
+    function lD(array ...$vars): void
     {
         $debug = debug_backtrace()[0];
         foreach ($vars as $v) {
@@ -51,9 +49,7 @@ if (! function_exists('lConvertApiDropDown')) {
     /**
      * This function convert to SPI like dropdown
      *
-     * @param $data
-     * @param $keyName
-     * @param $valueName
+     * @param mixed $data
      * @param array $extra
      * @return array
      */
@@ -67,8 +63,8 @@ if (! function_exists('lConvertApiDropDown')) {
         }
         $finalArray = [];
         foreach ($data as $index => $value) {
-            $array = [];
-            $array[$keyName] = $index;
+            $array             = [];
+            $array[$keyName]   = $index;
             $array[$valueName] = $value;
             if (is_array($extra) && ! empty($extra)) {
                 foreach ($extra as $extraKey => $values) {
