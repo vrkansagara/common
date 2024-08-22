@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Vrkansagara\Common\Helpers;
 
 use PHPUnit\Framework\TestCase;
+
+use function getIpecho;
 
 class IpTest extends TestCase
 {

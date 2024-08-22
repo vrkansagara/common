@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @copyright  Copyright (c) 2015-2022 Vallabh Kansagara <vrkansagara@gmail.com>
- * @license    https://opensource.org/licenses/BSD-3-Clause New BSD License
- */
-
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
@@ -67,8 +62,8 @@ if (! function_exists('lConvertApiDropDown')) {
         }
         $finalArray = [];
         foreach ($data as $index => $value) {
-            $array = [];
-            $array[$keyName] = $index;
+            $array             = [];
+            $array[$keyName]   = $index;
             $array[$valueName] = $value;
             if (is_array($extra) && ! empty($extra)) {
                 foreach ($extra as $extraKey => $values) {

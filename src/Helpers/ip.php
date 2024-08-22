@@ -1,19 +1,10 @@
 <?php
 
-/**
- * @copyright  Copyright (c) 2015-2022 Vallabh Kansagara <vrkansagara@gmail.com>
- * @license    https://opensource.org/licenses/BSD-3-Clause New BSD License
- */
+declare(strict_types=1);
 
-/**
- * Helper file
- */
 if (! function_exists('validate_ip')) {
     /**
      * Ensures an ip address is both a valid IP and does not fall within a private network range.
-     *
-     * @param string $ip
-     * @return bool
      */
     function validate_ip(string $ip): bool
     {
@@ -67,16 +58,11 @@ if (! function_exists('getIpecho')) {
 }
 
 if (! function_exists('getIpInfo')) {
-    /**
-     * @param string $token
-     * @param string $ip
-     * @return string|null
-     */
     function getIpInfo(string $token, string $ip = ''): string|null
     {
         $returnResponse = null;
         if (! empty($ip) && validate_ip($ip)) {
-            $curl = sprintf("https://ipinfo.io/%s?token=%s", $ip, $token);
+            $curl           = sprintf("https://ipinfo.io/%s?token=%s", $ip, $token);
             $returnResponse = @json_decode(file_get_contents($curl, false, stream_context_create([
                 'http' => [
                     'method' => 'GET',

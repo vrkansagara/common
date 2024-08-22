@@ -32,6 +32,7 @@
             "Vrkansagara\\Common\\": "src"
         },
         "files": [
+            "src/Helpers/curl.php",
             "src/Helpers/helper.php",
             "src/Helpers/http.php",
             "src/Helpers/ip.php",
