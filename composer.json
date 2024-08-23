@@ -66,6 +66,9 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
+    "bin": [
+        "bin/vrkansagara.php"
+    ],
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump"
