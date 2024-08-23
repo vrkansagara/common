@@ -2,51 +2,6 @@
 
 declare(strict_types=1);
 
-if (! function_exists('num_cpus')) {
-    /**
-     * Returns the number of available CPU cores
-     *
-     *  Should work for Linux, Windows, Mac & BSD
-     *
-     * @return integer
-     */
-    function num_cpus()
-    {
-        $numCpus = 1;
-
-        if (is_file('/proc/cpuinfo')) {
-            $cpuinfo = file_get_contents('/proc/cpuinfo');
-            preg_match_all('/^processor/m', $cpuinfo, $matches);
-
-            $numCpus = count($matches[0]);
-        } elseif ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
-            $process = @popen('wmic cpu get NumberOfCores', 'rb');
-
-            if (false !== $process) {
-                fgets($process);
-                $numCpus = intval(fgets($process));
-
-                pclose($process);
-            }
-        } else {
-            $process = @popen('sysctl -a', 'rb');
-
-            if (false !== $process) {
-                $output = stream_get_contents($process);
-
-                preg_match('/hw.ncpu: (\d+)/', $output, $matches);
-                if ($matches) {
-                    $numCpus = intval($matches[1][0]);
-                }
-
-                pclose($process);
-            }
-        }
-
-        return $numCpus;
-    }
-}
-
 //Add whatever options here. The CURLOPT_URL is left out intentionally.
 //It will be added in later from the url array.
 //$optionArray = [
@@ -63,7 +18,7 @@ if (! function_exists('num_cpus')) {
 
 ////Play around with this number and see what works best.
 ////This is how many urls it will try to do at one time.
-//$nThreads = num_cpus();
+//$nThreads = numCpus();
 
 if (! function_exists('multi_thread_curl')) {
     /**

@@ -38,11 +38,14 @@
             "Vrkansagara\\Common\\": "src"
         },
         "files": [
+            "src/Helpers/csv.php",
             "src/Helpers/curl.php",
             "src/Helpers/http.php",
             "src/Helpers/ip.php",
             "src/Helpers/laravel.php",
             "src/Helpers/payload.php",
+            "src/Helpers/string.php",
+            "src/Helpers/system.php",
             "src/Helpers/time.php"
         ]
     },
@@ -87,8 +90,10 @@
     },
     "require-dev": {
         "illuminate/collections": "^11.21",
+        "illuminate/database": "^11.21",
         "illuminate/http": "^11.21",
         "laminas/laminas-coding-standard": "^2.5",
+        "nesbot/carbon": "^3.8",
         "phpunit/phpunit": "^9.6"
     }
 }

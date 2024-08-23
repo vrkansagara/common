@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 if (! function_exists('lIsProductionEnvironment')) {
     function lIsProductionEnvironment(): bool
@@ -74,5 +76,40 @@ if (! function_exists('lConvertApiDropDown')) {
             $finalArray[] = $array;
         }
         return $finalArray;
+    }
+}
+
+if (! function_exists('cronLog')) {
+    /**
+     * Lets store cron logging in database
+     *
+     * @param array $options
+     * @throws Exception
+     */
+    function cronLog(string $signature, int $isStart = 1, array $options = []): void
+    {
+        try {
+            DB::beginTransaction();
+            $data = ['name' => $signature];
+            $now  = Carbon::now();
+            if ($isStart) {
+                $data['start'] = $now;
+                if (isset($options['created_at'])) {
+                    $data['created_at'] = $options['created_at'];
+                }
+                DB::table('cron_log')->insert($data);
+            } else {
+                $data['end'] = $now;
+                DB::table('cron_log')
+                    ->where('name', '=', $signature)
+                    ->orderByDesc('id')
+                    ->limit(1)
+                    ->update($data);
+            }
+            DB::commit();
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
     }
 }
