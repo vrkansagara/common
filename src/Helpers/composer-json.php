@@ -7,7 +7,7 @@ if (! function_exists('getComposerDetails')) {
     {
         $restunData = null;
         if (is_readable($composerJsonFilePath)) {
-            $composerDetails = json_decode(file_get_contents($composerJsonFilePath), true);
+            $composerDetails = json_decode(file_get_contents(realpath($composerJsonFilePath)), true);
             $data            = array_keys($composerDetails);
             ksort($data);
             $restunData = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
