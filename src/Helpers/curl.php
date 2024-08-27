@@ -77,3 +77,71 @@ if (! function_exists('multi_thread_curl')) {
         return $results;
     }
 }
+
+if (! function_exists('connect')) {
+    /**
+     * @param array $payload
+     * @param array $headers
+     * @return array
+     */
+    function connect(string $url, string $method = 'get', array $payload = [], array $headers = [], int $isDebug = 0)
+    {
+        $timeout    = 30;
+        $redirect   = 3;
+        $verboseLog = '';
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+            return [
+                'status'   => 0,
+                'response' => null,
+                'verbose'  => $verboseLog,
+            ];
+        }
+        $curl      = curl_init();
+        $userAgent =
+            'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31';
+        $options   = [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_USERAGENT      => $userAgent,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_CONNECTTIMEOUT => $timeout,
+            CURLOPT_MAXREDIRS      => $redirect,
+            CURLOPT_ENCODING       => "",
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        ];
+
+        if (strtolower($method) === 'post') {
+            $options[CURLOPT_POST]       = 1;
+            $options[CURLOPT_POSTFIELDS] = json_encode($payload);
+        }
+
+        if (! empty($headers)) {
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        }
+
+        if ($isDebug) {
+            curl_setopt($curl, CURLOPT_VERBOSE, true);
+            $verbose                  = fopen('php://temp', 'w+');
+            $options[CURLOPT_VERBOSE] = true;
+            $options[CURLOPT_STDERR]  = $verbose;
+        }
+        curl_setopt_array($curl, $options);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        $serverOutput = curl_exec($curl);
+
+        if ($isDebug) {
+            rewind($verbose);
+            $verboseLog = stream_get_contents($verbose);
+        }
+        curl_close($curl);
+
+        if (! $serverOutput) {
+            die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+        }
+        return [
+            'status'   => 1,
+            'response' => $serverOutput,
+            'verbose'  => $verboseLog,
+        ];
+    }
+}

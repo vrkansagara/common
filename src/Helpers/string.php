@@ -49,3 +49,31 @@ if (! function_exists('stringToSecret')) {
             . substr($string, $visibleCount * -1, $visibleCount);
     }
 }
+
+if (! function_exists('isValidJson')) {
+    function isValidJson(string $string): bool
+    {
+        json_decode($string);
+        return json_last_error() === JSON_ERROR_NONE;
+    }
+}
+
+if (! function_exists('generateRandomString')) {
+    /**
+     * Generate random string.
+     */
+    function generateRandomString(int $length = 32): string
+    {
+        // Alphabets (Capitals & Smalls), numeric values and special characters should be there
+        $capital           = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 1);
+        $small             = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 1);
+        $number            = substr(str_shuffle('0123456789'), 0, 1);
+        $specialCharacters = substr(str_shuffle("!#$%&*-@_"), 0, 1);
+        $pool              = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%&*-@_';
+        return substr(str_shuffle(str_repeat($pool, 5)), 0, $length - 2)
+            . $capital
+            . $small
+            . $number
+            . $specialCharacters;
+    }
+}

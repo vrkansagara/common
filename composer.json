@@ -31,7 +31,8 @@
         "ext-pcre": "*",
         "ext-soap": "*",
         "ext-xml": "*",
-        "ext-zlib": "*"
+        "ext-zlib": "*",
+        "league/commonmark": "^2.5"
     },
     "autoload": {
         "psr-4": {

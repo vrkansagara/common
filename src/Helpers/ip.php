@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-if (! function_exists('validate_ip')) {
+if (! function_exists('isValidIp')) {
     /**
      * Ensures an ip address is both a valid IP and does not fall within a private network range.
      */
-    function validate_ip(string $ip): bool
+    function isValidIp(string $ip): bool
     {
         if (strtolower($ip) === 'unknown') {
             return false;
@@ -50,6 +50,7 @@ if (! function_exists('validate_ip')) {
         return true;
     }
 }
+
 if (! function_exists('getIpecho')) {
     function getIpecho(): string
     {
@@ -73,5 +74,50 @@ if (! function_exists('getIpInfo')) {
             ])), true);
         }
         return $returnResponse;
+    }
+}
+
+if (! function_exists('getIpAddress')) {
+    /**
+     * Retrieves the best guess of the client's actual IP address.
+     * Takes into account numerous HTTP proxy headers due to variations
+     * in how different ISPs handle IP addresses in headers between hops.
+     */
+    function getIpAddress(): string
+    {
+        // check for shared internet/ISP IP
+        if (! empty($_SERVER['HTTP_CLIENT_IP']) && isValidIp($_SERVER['HTTP_CLIENT_IP'])) {
+            return $_SERVER['HTTP_CLIENT_IP'];
+        }
+        // check for IPs passing through proxies
+        if (! empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // check if multiple ips exist in var
+            if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',') !== false) {
+                $iplist = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+                foreach ($iplist as $ip) {
+                    if (isValidIp($ip)) {
+                        return $ip;
+                    }
+                }
+            } else {
+                if (isValidIp($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                    return $_SERVER['HTTP_X_FORWARDED_FOR'];
+                }
+            }
+        }
+        if (! empty($_SERVER['HTTP_X_FORWARDED']) && isValidIp($_SERVER['HTTP_X_FORWARDED'])) {
+            return $_SERVER['HTTP_X_FORWARDED'];
+        }
+        if (! empty($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) && isValidIp($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) {
+            return $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+        }
+        if (! empty($_SERVER['HTTP_FORWARDED_FOR']) && isValidIp($_SERVER['HTTP_FORWARDED_FOR'])) {
+            return $_SERVER['HTTP_FORWARDED_FOR'];
+        }
+        if (! empty($_SERVER['HTTP_FORWARDED']) && isValidIp($_SERVER['HTTP_FORWARDED'])) {
+            return $_SERVER['HTTP_FORWARDED'];
+        }
+        // return unreliable ip since all else failed
+        return $_SERVER['REMOTE_ADDR'];
     }
 }

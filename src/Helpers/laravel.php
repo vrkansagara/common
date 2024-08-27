@@ -6,11 +6,19 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 
 if (! function_exists('lIsProductionEnvironment')) {
     function lIsProductionEnvironment(): bool
     {
-        return in_array(app()->environment(), ['prod', 'production']) ? true : false;
+        return in_array(app()->environment(), [
+            'prod',
+            'production',
+            'uat',
+            'staging',
+            'stag',
+            'qa',
+        ]) ? true : false;
     }
 }
 
@@ -79,14 +87,14 @@ if (! function_exists('lConvertApiDropDown')) {
     }
 }
 
-if (! function_exists('cronLog')) {
+if (! function_exists('lCronLog')) {
     /**
      * Lets store cron logging in database
      *
      * @param array $options
      * @throws Exception
      */
-    function cronLog(string $signature, int $isStart = 1, array $options = []): void
+    function lCronLog(string $signature, int $isStart = 1, array $options = []): void
     {
         try {
             DB::beginTransaction();
@@ -110,6 +118,45 @@ if (! function_exists('cronLog')) {
         } catch (Exception $exception) {
             DB::rollBack();
             throw $exception;
+        }
+    }
+}
+
+if (! function_exists('lIsActiveRoute')) {
+    /**
+     * --------------------------------------------------------------------------
+     *  Detect Active Route
+     * --------------------------------------------------------------------------
+     *
+     *  Compare given route with current route and return output if they match.
+     *  Very useful for navigation, marking if the link is active.
+     */
+    function lIsActiveRoute(string $route, string $output = "active"): string
+    {
+        if (Request::capture()->is($route)) {
+            return $output;
+        }
+        return 'inactive';
+    }
+}
+
+if (! function_exists('lAreActiveRoutes')) {
+    /**
+     * --------------------------------------------------------------------------
+     * Detect Active Routes
+     * --------------------------------------------------------------------------
+     *
+     * Compare given routes with current route and return output if they match.
+     * Very useful for navigation, marking if the link is active.
+     *
+     * @param array $routes
+     */
+    function lAreActiveRoutes(array $routes, string $output = "active"): string
+    {
+        foreach ($routes as $route) {
+            if (Route::currentRouteName() === $route) {
+                return $output;
+            }
         }
     }
 }

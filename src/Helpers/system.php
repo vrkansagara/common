@@ -57,3 +57,16 @@ if (! function_exists('getCurrentMemoryUsage')) {
         return @round($size / pow(1024, $i = floor(log($size, 1024))), 2) . ' ' . $unit[$i];
     }
 }
+
+if (! function_exists('formatSizeUnits')) {
+    /**
+     * @psalm-param 0|positive-int $size
+     */
+    function formatSizeUnits(int $size): string
+    {
+        $base   = log($size) / log(1024);
+        $suffix = ['', 'KB', 'MB', 'GB', 'TB'];
+        $fBase  = floor($base);
+        return round(pow(1024, $base - floor($base)), 2) . $suffix[$fBase];
+    }
+}
